@@ -37,43 +37,6 @@ Built with performance and user experience in mind, this platform is an explorat
 
 ---
 
-## 🚀 Getting Started
-
-To run this project locally, you will need Node.js and a couple of API keys.
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Sivanand9061/Socratic.git
-   cd Socratic
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up Environment Variables:**
-   Create a `.env.local` file in the root directory and add your keys:
-   ```env
-   GROQ_API_KEY=your_groq_api_key
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_firebase_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
----
-
 ## 💡 Engineering Highlights
 
 *   **Graceful Degradation:** The Firebase authentication layer is designed to gracefully degrade. If API keys are missing during local development, the app will safely bypass the crash rather than failing entirely.

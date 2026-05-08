@@ -71,7 +71,7 @@ export async function generateFlashcards(text: string) {
       messages: [
         {
           role: "system",
-          content: "You are an expert tutor. Extract the core concepts from the provided text and output a JSON array of flashcards. Each flashcard must have a 'front' (question/concept) and 'back' (answer/definition). Return ONLY valid JSON array of objects, e.g. [{\"front\":\"...\",\"back\":\"...\"}]"
+          content: "You are an expert tutor. Extract the core concepts from the provided text and output a JSON object containing a 'flashcards' array. Each flashcard must have a 'front' (question/concept) and 'back' (answer/definition). Return ONLY a valid JSON object, e.g. {\"flashcards\": [{\"front\":\"...\",\"back\":\"...\"}]}"
         },
         {
           role: "user",
@@ -97,17 +97,18 @@ export async function generateFlashcards(text: string) {
     }
 
     // Attempt to save to Firebase (will fail gracefully if not configured)
-    try {
-      if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-         await addDoc(collection(db, "flashcard_decks"), {
-           sourceText: text,
-           cards: parsed,
-           createdAt: new Date().toISOString()
-         });
-      }
-    } catch(err) {
-      console.log("Firebase not configured or failed", err);
-    }
+    // NOTE: Using Firebase Client SDK in a Server Action causes it to hang indefinitely.
+    // try {
+    //   if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+    //      await addDoc(collection(db, "flashcard_decks"), {
+    //        sourceText: text,
+    //        cards: parsed,
+    //        createdAt: new Date().toISOString()
+    //      });
+    //   }
+    // } catch(err) {
+    //   console.log("Firebase not configured or failed", err);
+    // }
 
     return parsed;
   } catch (error) {
@@ -172,17 +173,17 @@ export async function generateExam(topic: string) {
     const parsed = JSON.parse(content);
     
     // Attempt to save to Firebase
-    try {
-      if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-         await addDoc(collection(db, "exams"), {
-           topic,
-           questions: parsed.questions,
-           createdAt: new Date().toISOString()
-         });
-      }
-    } catch(err) {
-      console.log("Firebase not configured or failed", err);
-    }
+    // try {
+    //   if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+    //      await addDoc(collection(db, "exams"), {
+    //        topic,
+    //        questions: parsed.questions,
+    //        createdAt: new Date().toISOString()
+    //      });
+    //   }
+    // } catch(err) {
+    //   console.log("Firebase not configured or failed", err);
+    // }
 
     return parsed.questions || [];
   } catch (error) {

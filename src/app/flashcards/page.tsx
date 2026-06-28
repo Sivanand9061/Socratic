@@ -6,9 +6,13 @@ import { Sparkles, ArrowRight, RefreshCw, BrainCircuit, GraduationCap, FileText 
 import { generateFlashcards } from "../actions";
 import { useStudyContext } from "@/components/StudyContext";
 import Link from "next/link";
+import { useAuth } from "@/components/AuthProvider";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function FlashcardsPage() {
   const { pdfText, selectedTopic } = useStudyContext();
+  const { user } = useAuth();
   const [text, setText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [flashcards, setFlashcards] = useState<{ front: string; back: string }[]>([]);
@@ -30,6 +34,20 @@ export default function FlashcardsPage() {
       setFlashcards(generatedCards);
       setActiveCardIndex(0);
       setIsFlipped(false);
+
+      // Save to Firebase Firestore if logged in and Firebase is configured
+      if (user && db) {
+        try {
+          await addDoc(collection(db, "flashcard_decks"), {
+            userId: user.uid,
+            topic: selectedTopic || "Custom Pasted Text",
+            cards: generatedCards,
+            createdAt: new Date().toISOString()
+          });
+        } catch (dbErr) {
+          console.error("Failed to save flashcards to Firestore:", dbErr);
+        }
+      }
     } catch (error) {
       console.error(error);
       alert("Failed to generate flashcards. Please try again.");

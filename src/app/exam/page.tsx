@@ -6,9 +6,13 @@ import { Play, Sparkles, BrainCircuit, CheckCircle2, XCircle, BarChart3, Chevron
 import { generateExam } from "../actions";
 import { useStudyContext } from "@/components/StudyContext";
 import Link from "next/link";
+import { useAuth } from "@/components/AuthProvider";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function ExamPage() {
   const { selectedTopic, pdfText } = useStudyContext();
+  const { user } = useAuth();
   const [examTopic, setExamTopic] = useState("");
   const [examState, setExamState] = useState<"setup" | "generating" | "taking" | "grading" | "results">("setup");
   const [examQuestions, setExamQuestions] = useState<{question: string, options: string[], correct: number, category: string}[]>([]);
@@ -53,6 +57,30 @@ export default function ExamPage() {
       setCurrentQuestionIdx(prev => prev + 1);
     } else {
       setExamState("grading");
+
+      // Calculate score and save results to Firestore
+      const correctCount = examQuestions.reduce((acc, q, idx) => {
+        return acc + (userAnswers[idx] === q.correct ? 1 : 0);
+      }, 0);
+      const score = Math.round((correctCount / examQuestions.length) * 100);
+
+      if (user && db) {
+        try {
+          addDoc(collection(db, "exam_attempts"), {
+            userId: user.uid,
+            topic: examTopic,
+            score,
+            correctCount,
+            totalQuestions: examQuestions.length,
+            userAnswers,
+            createdAt: new Date().toISOString()
+          });
+          console.log("Successfully saved exam attempt to Firestore!");
+        } catch (dbErr) {
+          console.error("Failed to save exam attempt to Firestore:", dbErr);
+        }
+      }
+
       setTimeout(() => {
         setExamState("results");
       }, 2500);

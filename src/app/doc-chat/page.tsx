@@ -34,57 +34,13 @@ export default function DocumentChatPage() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Lock scrolling on html, body, and parent elements to prevent viewport panning
+  // Lock body scrolling to prevent window panning
   useEffect(() => {
-    const htmlEl = document.documentElement;
-    const bodyEl = document.body;
+    const originalBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     
-    // Save original styles
-    const originalHtmlOverflow = htmlEl.style.overflow;
-    const originalHtmlHeight = htmlEl.style.height;
-    const originalHtmlPosition = htmlEl.style.position;
-    
-    const originalBodyOverflow = bodyEl.style.overflow;
-    const originalBodyHeight = bodyEl.style.height;
-    const originalBodyPosition = bodyEl.style.position;
-    
-    // Find parent element of our main content
-    const mainEl = document.querySelector("main");
-    const parentEl = mainEl?.parentElement;
-    const originalParentOverflow = parentEl ? parentEl.style.overflow : "";
-
-    // Lock html and body
-    htmlEl.style.overflow = "hidden";
-    htmlEl.style.height = "100%";
-    htmlEl.style.position = "fixed";
-    htmlEl.style.width = "100%";
-
-    bodyEl.style.overflow = "hidden";
-    bodyEl.style.height = "100%";
-    bodyEl.style.position = "fixed";
-    bodyEl.style.width = "100%";
-
-    // Lock the parent wrapper div and remove h-full class so it can fit exactly below the Navbar via flex-1
-    if (parentEl) {
-      parentEl.classList.remove("h-full");
-      parentEl.style.overflow = "hidden";
-    }
-
     return () => {
-      htmlEl.style.overflow = originalHtmlOverflow;
-      htmlEl.style.height = originalHtmlHeight;
-      htmlEl.style.position = originalHtmlPosition;
-      htmlEl.style.width = "";
-
-      bodyEl.style.overflow = originalBodyOverflow;
-      bodyEl.style.height = originalBodyHeight;
-      bodyEl.style.position = originalBodyPosition;
-      bodyEl.style.width = "";
-
-      if (parentEl) {
-        parentEl.classList.add("h-full");
-        parentEl.style.overflow = originalParentOverflow;
-      }
+      document.body.style.overflow = originalBodyOverflow;
     };
   }, []);
 
@@ -198,7 +154,7 @@ Toggle between **Direct** mode for straight answers, or **Socratic** mode if you
   }
 
   return (
-    <main className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-0 lg:gap-8 overflow-hidden p-0 lg:p-6">
+    <main className="fixed inset-x-0 bottom-0 top-[60px] sm:top-[68px] lg:static lg:flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-0 lg:gap-8 overflow-hidden p-0 lg:p-6 bg-[#fafafa] dark:bg-[#0a0a0a] z-40">
       
       {/* Left Sidebar: Document Info Preview (Desktop only) */}
       <motion.div 

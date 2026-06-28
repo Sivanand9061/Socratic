@@ -34,23 +34,58 @@ export default function DocumentChatPage() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Lock body scrolling and position to prevent browser viewport panning
+  // Lock scrolling on html, body, and parent elements to prevent viewport panning
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    const originalPosition = document.body.style.position;
-    const originalWidth = document.body.style.width;
-    const originalHeight = document.body.style.height;
+    const htmlEl = document.documentElement;
+    const bodyEl = document.body;
+    
+    // Save original styles
+    const originalHtmlOverflow = htmlEl.style.overflow;
+    const originalHtmlHeight = htmlEl.style.height;
+    const originalHtmlPosition = htmlEl.style.position;
+    
+    const originalBodyOverflow = bodyEl.style.overflow;
+    const originalBodyHeight = bodyEl.style.height;
+    const originalBodyPosition = bodyEl.style.position;
+    
+    // Find parent element of our main content
+    const mainEl = document.querySelector("main");
+    const parentEl = mainEl?.parentElement;
+    const originalParentOverflow = parentEl ? parentEl.style.overflow : "";
+    const originalParentHeight = parentEl ? parentEl.style.height : "";
 
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.width = "100%";
-    document.body.style.height = "100%";
+    // Lock html and body
+    htmlEl.style.overflow = "hidden";
+    htmlEl.style.height = "100%";
+    htmlEl.style.position = "fixed";
+    htmlEl.style.width = "100%";
+
+    bodyEl.style.overflow = "hidden";
+    bodyEl.style.height = "100%";
+    bodyEl.style.position = "fixed";
+    bodyEl.style.width = "100%";
+
+    // Lock the parent wrapper div
+    if (parentEl) {
+      parentEl.style.overflow = "hidden";
+      parentEl.style.height = "100%";
+    }
 
     return () => {
-      document.body.style.overflow = originalOverflow;
-      document.body.style.position = originalPosition;
-      document.body.style.width = originalWidth;
-      document.body.style.height = originalHeight;
+      htmlEl.style.overflow = originalHtmlOverflow;
+      htmlEl.style.height = originalHtmlHeight;
+      htmlEl.style.position = originalHtmlPosition;
+      htmlEl.style.width = "";
+
+      bodyEl.style.overflow = originalBodyOverflow;
+      bodyEl.style.height = originalBodyHeight;
+      bodyEl.style.position = originalBodyPosition;
+      bodyEl.style.width = "";
+
+      if (parentEl) {
+        parentEl.style.overflow = originalParentOverflow;
+        parentEl.style.height = originalParentHeight;
+      }
     };
   }, []);
 
@@ -212,7 +247,7 @@ Toggle between **Direct** mode for straight answers, or **Socratic** mode if you
         className="flex-1 flex flex-col bg-white dark:bg-zinc-900 lg:border lg:border-zinc-200 lg:dark:border-zinc-800 lg:rounded-3xl overflow-hidden shadow-sm h-full"
       >
         {/* Chat Header */}
-        <div className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 px-4 lg:px-6 py-3 lg:py-4 flex flex-row items-center justify-between gap-3 shrink-0">
+        <div className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 px-4 lg:px-6 py-3 lg:py-4 flex flex-row items-center justify-between gap-3 shrink-0 touch-none">
           <div className="flex flex-col gap-0.5 min-w-0">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -372,7 +407,7 @@ Toggle between **Direct** mode for straight answers, or **Socratic** mode if you
         </div>
 
         {/* Input Form (Stays fixed at bottom) */}
-        <div className="border-t border-zinc-100 dark:border-zinc-800 p-3 lg:p-4 bg-white dark:bg-zinc-900 shrink-0">
+        <div className="border-t border-zinc-100 dark:border-zinc-800 p-3 lg:p-4 bg-white dark:bg-zinc-900 shrink-0 touch-none">
           <form onSubmit={handleSend} className="relative flex items-center max-w-4xl mx-auto w-full">
             <input
               type="text"
@@ -384,7 +419,7 @@ Toggle between **Direct** mode for straight answers, or **Socratic** mode if you
                   ? `Ask for a Socratic hint...`
                   : `Ask a question about "${selectedTopic || "your document"}"...`
               }
-              className="w-full bg-zinc-50 dark:bg-zinc-955 border border-zinc-200 dark:border-zinc-800 focus:border-olive-500 focus:ring-2 focus:ring-olive-500/20 rounded-2xl pl-4 pr-12 py-3 lg:py-4 outline-none text-sm transition-all text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
+              className="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-350 dark:border-zinc-700 focus:border-olive-500 focus:ring-2 focus:ring-olive-500/20 rounded-2xl pl-4 pr-12 py-3 lg:py-4 outline-none text-base transition-all text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
             />
             <button
               type="submit"

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, BookOpen, BrainCircuit, Volume2 } from "lucide-react";
+import { ArrowRight, BookOpen, BrainCircuit, Volume2, MessageSquare } from "lucide-react";
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -92,7 +92,22 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Link href="/doc-chat" className="group">
+              <div className="bg-white rounded-3xl p-8 h-full border border-zinc-200 hover:border-olive-400 transition-colors shadow-sm hover:shadow-xl flex flex-col">
+                <div className="w-16 h-16 rounded-2xl bg-olive-50 flex items-center justify-center text-olive-600 mb-8 group-hover:scale-110 transition-transform duration-300">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold text-zinc-900 mb-4">Document Chat</h3>
+                <p className="text-zinc-500 flex-1">
+                  Upload any textbook or syllabus and ask questions. Choose between direct explanations or Socratic guidance to build critical understanding.
+                </p>
+                <div className="mt-8 flex items-center text-olive-600 font-semibold gap-2 group-hover:gap-4 transition-all">
+                  Try it out <ArrowRight className="w-5 h-5" />
+                </div>
+              </div>
+            </Link>
+
             <Link href="/flashcards" className="group">
               <div className="bg-white rounded-3xl p-8 h-full border border-zinc-200 hover:border-olive-400 transition-colors shadow-sm hover:shadow-xl flex flex-col">
                 <div className="w-16 h-16 rounded-2xl bg-olive-50 flex items-center justify-center text-olive-600 mb-8 group-hover:scale-110 transition-transform duration-300">

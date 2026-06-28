@@ -11,6 +11,7 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard" },
+    { name: "Doc Chat", href: "/doc-chat" },
     { name: "Flashcards", href: "/flashcards" },
     { name: "Voice Tutor", href: "/voice-tutor" },
     { name: "Exam Simulator", href: "/exam" },

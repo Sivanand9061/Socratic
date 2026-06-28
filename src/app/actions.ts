@@ -191,3 +191,50 @@ export async function generateExam(topic: string) {
     throw new Error("Failed to generate exam");
   }
 }
+
+// AI Document Q&A Response
+export async function getDocumentChatResponse(
+  history: { role: "user" | "assistant"; content: string }[],
+  pdfText: string,
+  selectedTopic: string | null,
+  mode: "socratic" | "direct" = "direct"
+) {
+  try {
+    // Truncate PDF text to ~50k characters to stay within reasonable token/time limits
+    const truncatedText = pdfText.substring(0, 50000);
+    
+    let systemPrompt = `You are "The Socratic" AI Document Assistant. Your goal is to help the user understand the uploaded document.
+Here is the text from the uploaded document:
+---
+${truncatedText}
+---
+`;
+
+    if (selectedTopic) {
+      systemPrompt += `\nThe user is currently focusing on the topic/chapter: "${selectedTopic}". Prioritize answering contextually to this chapter if possible.\n`;
+    }
+
+    if (mode === "socratic") {
+      systemPrompt += `\nMode: SOCRATIC. You must NOT give the answers directly. Instead, ask leading questions, give subtle hints, or point the user to relevant parts of the text so they can deduce the answer themselves. Help them think critically. Keep responses short and conversational.`;
+    } else {
+      systemPrompt += `\nMode: DIRECT Q&A. Answer the user's questions clearly, accurately, and directly using the document text as your source. Cite specific sections or terms from the text if possible. Keep your answers concise, informative, and formatted with markdown (bullet points, bold text) for readability.`;
+    }
+
+    const response = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt
+        },
+        ...history
+      ],
+      model: "llama-3.3-70b-versatile",
+    });
+
+    return response.choices[0]?.message?.content || "I couldn't process the document text. Could you try rephrasing your question?";
+  } catch (error: any) {
+    console.error("Document Chat Groq Error:", error);
+    return `Error: ${error.message || "Failed to get response from AI"}`;
+  }
+}
+

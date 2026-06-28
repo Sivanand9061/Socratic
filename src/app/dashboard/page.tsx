@@ -159,8 +159,22 @@ export default function DashboardPage() {
             <div className="w-full">
               <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 text-center">Choose your study method:</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                {/* Tool 1 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                {/* Tool 1: Document Chat */}
+                <Link href="/doc-chat" className="group bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-olive-400 dark:hover:border-olive-500 transition-all flex flex-col items-center text-center hover:-translate-y-2">
+                  <div className="w-16 h-16 rounded-2xl bg-olive-50 dark:bg-olive-900/20 flex items-center justify-center text-olive-600 mb-6 group-hover:scale-110 transition-transform">
+                    <MessageSquare className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Document Chat</h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6 flex-1">
+                    Ask questions and chat with your uploaded material using direct Q&A or Socratic hints.
+                  </p>
+                  <div className="flex items-center font-bold text-olive-600">
+                    Launch <ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                </Link>
+
+                {/* Tool 2: Instant Flashcards */}
                 <Link href="/flashcards" className="group bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-olive-400 dark:hover:border-olive-500 transition-all flex flex-col items-center text-center hover:-translate-y-2">
                   <div className="w-16 h-16 rounded-2xl bg-olive-50 dark:bg-olive-900/20 flex items-center justify-center text-olive-600 mb-6 group-hover:scale-110 transition-transform">
                     <BookOpen className="w-8 h-8" />
@@ -174,7 +188,7 @@ export default function DashboardPage() {
                   </div>
                 </Link>
                 
-                {/* Tool 2 */}
+                {/* Tool 3: Socratic Voice Tutor */}
                 <Link href="/voice-tutor" className="group bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-olive-400 dark:hover:border-olive-500 transition-all flex flex-col items-center text-center hover:-translate-y-2">
                   <div className="w-16 h-16 rounded-2xl bg-olive-50 dark:bg-olive-900/20 flex items-center justify-center text-olive-600 mb-6 group-hover:scale-110 transition-transform">
                     <MessageSquare className="w-8 h-8" />
@@ -188,7 +202,7 @@ export default function DashboardPage() {
                   </div>
                 </Link>
 
-                {/* Tool 3 */}
+                {/* Tool 4: Blind Mock Exam */}
                 <Link href="/exam" className="group bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:border-olive-400 dark:hover:border-olive-500 transition-all flex flex-col items-center text-center hover:-translate-y-2">
                   <div className="w-16 h-16 rounded-2xl bg-olive-50 dark:bg-olive-900/20 flex items-center justify-center text-olive-600 mb-6 group-hover:scale-110 transition-transform">
                     <BrainCircuit className="w-8 h-8" />

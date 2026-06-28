@@ -34,6 +34,26 @@ export default function DocumentChatPage() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Lock body scrolling and position to prevent browser viewport panning
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    const originalPosition = document.body.style.position;
+    const originalWidth = document.body.style.width;
+    const originalHeight = document.body.style.height;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.position = originalPosition;
+      document.body.style.width = originalWidth;
+      document.body.style.height = originalHeight;
+    };
+  }, []);
+
   // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -144,7 +164,7 @@ Toggle between **Direct** mode for straight answers, or **Socratic** mode if you
   }
 
   return (
-    <main className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-0 lg:gap-8 h-[calc(100dvh-64px)] lg:h-[calc(100vh-76px)] overflow-hidden p-0 lg:p-6">
+    <main className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-0 lg:gap-8 overflow-hidden p-0 lg:p-6">
       
       {/* Left Sidebar: Document Info Preview (Desktop only) */}
       <motion.div 

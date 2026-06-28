@@ -52,7 +52,6 @@ export default function DocumentChatPage() {
     const mainEl = document.querySelector("main");
     const parentEl = mainEl?.parentElement;
     const originalParentOverflow = parentEl ? parentEl.style.overflow : "";
-    const originalParentHeight = parentEl ? parentEl.style.height : "";
 
     // Lock html and body
     htmlEl.style.overflow = "hidden";
@@ -65,10 +64,10 @@ export default function DocumentChatPage() {
     bodyEl.style.position = "fixed";
     bodyEl.style.width = "100%";
 
-    // Lock the parent wrapper div
+    // Lock the parent wrapper div and remove h-full class so it can fit exactly below the Navbar via flex-1
     if (parentEl) {
+      parentEl.classList.remove("h-full");
       parentEl.style.overflow = "hidden";
-      parentEl.style.height = "100%";
     }
 
     return () => {
@@ -83,8 +82,8 @@ export default function DocumentChatPage() {
       bodyEl.style.width = "";
 
       if (parentEl) {
+        parentEl.classList.add("h-full");
         parentEl.style.overflow = originalParentOverflow;
-        parentEl.style.height = originalParentHeight;
       }
     };
   }, []);
